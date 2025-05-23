@@ -1,11 +1,12 @@
 #!/bin/bash
 
 AMI_ID="ami-09c813fb71547fc4f"
-SG_ID="sg-0016b491173d15acd"  #replace with our SG ID
-Instances=("mongoDB" "Redis" "mysql" "rabbitmq" "catalogue" "user" "cart" "shipping" "payment" "dispatch" "frontend")
-ZONE_ID="Z07885981OQ6FL0MLB24C" #replace with Zone ID
-DOMAIN_NAME="pothina.store" #replace with domain
+SG_ID="sg-01bc7ebe005fb1cb2" # replace with your SG ID
+INSTANCES=("mongodb" "redis" "mysql" "rabbitmq" "catalogue" "user" "cart" "shipping" "payment" "dispatch" "frontend")
+ZONE_ID="Z07885981OQ6FL0MLB24C" # replace with your ZONE ID
+DOMAIN_NAME="pothina.store" # replace with your domain
 
+#for instance in ${INSTANCES[@]}
 for instance in $@
 do
     INSTANCE_ID=$(aws ec2 run-instances --image-id ami-09c813fb71547fc4f --instance-type t3.micro --security-group-ids sg-01bc7ebe005fb1cb2 --tag-specifications "ResourceType=instance,Tags=[{Key=Name, Value=$instance}]" --query "Instances[0].InstanceId" --output text)
