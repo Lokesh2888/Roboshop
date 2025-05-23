@@ -3,8 +3,8 @@
 AMI_ID="ami-09c813fb71547fc4f"
 SG_ID="sg-0016b491173d15acd"  #replace with our SG ID
 Instances=("mongoDB" "Redis" "mysql" "rabbitmq" "catalogue" "user" "cart" "shipping" "payment" "dispatch" "frontend")
-ZONE_ID="Z07885981OQ6FL0MLB24C"
-DOMAIN_NAME="pothina.store"
+ZONE_ID="Z07885981OQ6FL0MLB24C" #replace with Zone ID
+DOMAIN_NAME="pothina.store" #replace with domain
 
 for instance in ${Instances[@]}
 do
