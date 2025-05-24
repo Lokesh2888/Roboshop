@@ -16,7 +16,7 @@ echo "Script started executing at: $(date)" | tee -a $LOG_FILE
 #check the user has root priveleges or not
 if [ $USERID -ne 0 ]
 then
-   echo -e "$R ERROR:: Please run the script using root access $N"
+   echo -e "$R ERROR:: Please run the script using root access $N"  | tee -a $LOG_FILE
    exit 1 #give other than 0 till 127 to exit the script
 else
    echo "You are running with root access" | tee -a $LOG_FILE
@@ -42,15 +42,23 @@ VALIDATE $? "Enabling the required version of nodejs"
 dnf install nodejs -y &>>$LOG_FILE
 VALIDATE $? "Installing the nodejs"
 
-#useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
-#VALIDATE $? "Creating the roboshop system user"
+id roboshop
+if [ $? -ne 0 ]
+then
+    useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
+    VALIDATE $? "Creating the roboshop system user"
+else
+    echo -e "System user roboshop already created ... $Y SKIPPING $N"
+fi
+
 
 mkdir /app
 VALIDATE $? "Creating the app directory"
 
-curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip 
+curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>>$LOG_FILE
 VALIDATE $? "Downloading catalogue"
 
+rm -rf /app/*
 cd /app 
 unzip /tmp/catalogue.zip &>>$LOG_FILE
 VALIDATE $? "unzipping catalogue"
@@ -72,8 +80,15 @@ VALIDATE $? "Creating the mongo repo"
 dnf install mongodb-mongosh -y &>>$LOG_FILE
 VALIDATE $? "Installing the mongodb client"
 
-mongosh --host mongodb.pothina.store </app/db/master-data.js &>>$LOG_FILE
-VALIDATE $? "Loading data into mongoDB"
+
+STATUS=$(mongosh --host mongodb.daws84s.site --eval 'db.getMongo().getDBNames().indexOf("catalogue")')
+if [ $STATUS -lt 0 ]
+then
+   mongosh --host mongodb.pothina.store </app/db/master-data.js &>>$LOG_FILE
+   VALIDATE $? "Loading data into mongoDB"
+else
+  cho -e "Data is already loaded ... $Y SKIPPING $N"
+fi
 
 
 
