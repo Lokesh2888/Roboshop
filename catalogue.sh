@@ -52,28 +52,28 @@ curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue
 VALIDATE $? "Downloading catalogue"
 
 cd /app 
-unzip /tmp/catalogue.zip
+unzip /tmp/catalogue.zip &>>$LOG_FILE
 VALIDATE $? "unzipping catalogue"
 
-npm install
+npm install &>>$LOG_FILE
 VALIDATE$ $? "Installing the dependencies"
 
 cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service
 VALIDATE $? "copying catalogue service"
 
-systemctl daemon-reload
-systemctl enable catalogue 
+systemctl daemon-reload &>>$LOG_FILE
+systemctl enable catalogue &>>$LOG_FILE
 systemctl start catalogue
 VALIDATE $? "Starting catalogue"
 
 cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo
 VALIDATE $? "Creating the mongo repo"
 
-dnf install mongodb-mongosh -y 
+dnf install mongodb-mongosh -y &>>$LOG_FILE
 VALIDATE $? "Installing the mongodb client"
 
-mongosh --host mongodb.pothina.store </app/db/master-data.js
-VALIDATE $? "Importing the data"
+mongosh --host mongodb.pothina.store </app/db/master-data.js &>>$LOG_FILE
+VALIDATE $? "Loading data into mongoDB"
 
 
 
