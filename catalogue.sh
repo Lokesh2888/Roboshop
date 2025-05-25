@@ -51,13 +51,8 @@ else
     echo -e "System user roboshop already created ... $Y SKIPPING $N"
 fi
 
-if [ $? -ne 0 ]
-then
-    mkdir /app
-    VALIDATE $? "Creating the app directory"
-else
-   echo -e "Directory is already created.... $Y SKIPPING $N"
-fi
+mkdir /app
+VALIDATE $? "Creating the app directory"
    
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>>$LOG_FILE
 VALIDATE $? "Downloading catalogue"
