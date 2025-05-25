@@ -57,7 +57,7 @@ VALIDATE $? "Unzipping the content"
 
 rm -rf nginx.conf
 VALIDATE $? "Removing nignx.conf"
-cp $SCRIPT_DIR/nginx.conf  /etc/nginx/nginx.conf
+cp $SCRIPT_DIR/nginx.conf /etc/nginx/nginx.conf
 
 systemctl restart nginx &>>$LOG_FILE
 VALIDATE $? "Restarting nginx"
