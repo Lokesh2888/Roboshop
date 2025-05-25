@@ -51,7 +51,7 @@ else
     echo -e "System user roboshop already created ... $Y SKIPPING $N"
 fi
 
-mkdir /app
+cd /app
 if [ $? -ne 0 ]
 then
    mkdir /app
