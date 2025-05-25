@@ -68,7 +68,7 @@ unzip /tmp/catalogue.zip &>>$LOG_FILE
 VALIDATE $? "unzipping catalogue"
 
 npm install &>>$LOG_FILE
-VALIDATE$ $? "Installing the dependencies"
+VALIDATE $? "Installing the dependencies"
 
 cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service
 VALIDATE $? "copying catalogue service"
@@ -91,7 +91,7 @@ then
    mongosh --host mongodb.pothina.store </app/db/master-data.js &>>$LOG_FILE
    VALIDATE $? "Loading data into mongoDB"
 else
-  cho -e "Data is already loaded ... $Y SKIPPING $N"
+  echo -e "Data is already loaded ... $Y SKIPPING $N"
 fi
 
 
